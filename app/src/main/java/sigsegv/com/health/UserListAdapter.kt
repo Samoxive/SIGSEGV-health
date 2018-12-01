@@ -3,33 +3,28 @@ package sigsegv.com.health
 import android.graphics.Bitmap
 import android.widget.TextView
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.view.LayoutInflater
+import android.support.v4.content.ContextCompat.startActivity
+import android.content.Intent
 
+interface OnItemClickListener{
+    fun onClick(itemPosition: Int)
+}
 
-
-class UserListAdapter(private val mUsers: List<UserList>): RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
-    val itemOnClick: (View, Int, Int) -> Unit = { view, position, type ->
-        Log.d("asd", "test")
-    }
-
-    fun <T : RecyclerView.ViewHolder> T.onClick(event: (view: View, position: Int, type: Int) -> Unit): T {
-        itemView.setOnClickListener {
-            event.invoke(it, adapterPosition, itemViewType)
-        }
-        return this
-    }
+class UserListAdapter(private val mUsers: List<UserList>, private val clickListener: OnItemClickListener): RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
         val context = p0.context
         val inflater = LayoutInflater.from(context)
-        val contactView = inflater.inflate(R.layout.item_user_selector, p0, false)
-        val vH = ViewHolder(contactView)
-        vH.onClick(itemOnClick)
+        val itemView = inflater.inflate(R.layout.item_user_selector, p0, false)
+        itemView.setOnClickListener {
+            clickListener.onClick(p1)
+        }
+        val vH = ViewHolder(itemView)
+
         return vH
     }
 
@@ -47,8 +42,7 @@ class UserListAdapter(private val mUsers: List<UserList>): RecyclerView.Adapter<
         imageView.setImageBitmap(user.userImage)
     }
 
-    inner class ViewHolder
-        (itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         var userImageView: ImageView = itemView.findViewById(R.id.user_image)
         var nameTextView: TextView = itemView.findViewById(R.id.user_name)
