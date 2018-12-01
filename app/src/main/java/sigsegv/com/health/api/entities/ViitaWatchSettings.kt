@@ -17,7 +17,7 @@ data class ViitaWatchSettings(
     val activitySetExercise: Int
 )
 
-data class ViitaNotificationTypes (
+data class ViitaNotificationTypes(
     val incomingCall: Boolean,
     val textMessage: Boolean,
     val whatsapp: Boolean,

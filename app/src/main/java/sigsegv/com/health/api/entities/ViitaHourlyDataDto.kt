@@ -4,4 +4,4 @@ package sigsegv.com.health.api.entities
 //date: LocalDate
 //values: [Int] (max. 24 values; -1 means “no data available”)
 
-data class ViitaHourlyDataDto (val watchId: Long, val date: String, val values: List<Int>)
+data class ViitaHourlyDataDto(val watchId: Long, val date: String, val values: List<Int>)
