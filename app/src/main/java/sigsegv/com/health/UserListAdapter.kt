@@ -57,11 +57,17 @@ class UserListAdapter(val mUsers:List<UserList>) : RecyclerView.Adapter<UserList
 
 data class UserList (
     val userName: String,
-    val userImage: Bitmap
+    val userImage: Bitmap?
 ) {
     companion object {
-        fun createMockObjects(n: Int){
+        fun createMockObjects(n: Int) : List<UserList>{
+            val contacts = ArrayList<UserList>()
 
+            for (i in 1..n) {
+                contacts.add(UserList("Person", null))
+            }
+
+            return contacts
         }
     }
 }
