@@ -20,7 +20,7 @@ class UserListActivity : AppCompatActivity(), OnItemClickListener {
         val users = UserList.createMockObjects(20)
         val adapter = UserListAdapter(users, this)
 
-        AsyncAction({ getAllUsers(this@UserListActivity) }, { Log.wtf("Hello", Gson().toJson(it)) })
+        //AsyncAction({ getAllUsers(this@UserListActivity) }, { Log.wtf("Hello", Gson().toJson(it)) })
 
         rvUsers.adapter = adapter
         rvUsers.layoutManager = LinearLayoutManager(this)

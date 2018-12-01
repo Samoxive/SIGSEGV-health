@@ -8,6 +8,7 @@ import sigsegv.com.health.api.entities.SignInUserData
 import sigsegv.com.health.api.entities.UserData
 import sigsegv.com.health.api.entities.toSignInUserData
 import sigsegv.com.health.api.entities.toUserData
+import java.lang.Exception
 
 val mockUsers = mapOf(
     "utanis@viita-concept.com" to "12345678",
@@ -22,9 +23,9 @@ val mockUsers = mapOf(
 
 private val gson = Gson()
 
-private fun <T> Context.withDatabase(block: (DB) -> T): T {
+private fun <T> Context.withDatabase(block: (DB) -> T): T? {
     val db = DBFactory.open(this)
-    val value = block(db)
+    val value = try { block(db) } catch (e: Exception) { null }
     db.close()
     return value
 }

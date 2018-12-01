@@ -57,6 +57,17 @@ class UserOverviewFragment : Fragment() {
             wakeGoal = it.getString(ARG_WAKE_GOAL)!!
         }
 
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_user_overview, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         nameUser.text = name
         ageGender.text = ageGenderVal
         heightText.text = height.toString() + " m"
@@ -66,14 +77,7 @@ class UserOverviewFragment : Fragment() {
         dailyStepsVal.text = dailyStepGoal.toString()
         sleepTimeVal.text = sleepGoal
         wakeTimeVal.text = wakeGoal
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_overview, container, false)
+        super.onViewCreated(view, savedInstanceState)
     }
 
     companion object {
