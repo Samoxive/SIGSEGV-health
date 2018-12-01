@@ -8,10 +8,12 @@ package sigsegv.com.health.api.entities
 //stress: [ContinuousDataDto] (10 dakikada 1 veri çekiliyor, stress seviyesini ölçüyor)
 //sleep: [SleepDataDto]
 
-data class ViitaFullDataResponse(val activities: List<ViitaActivityDataResponse>,
-                                 val steps: List<ViitaHourlyDataDto>,
-                                 val calories: List<ViitaHourlyDataDto>,
-                                 val water: List<ViitaHourlyDataDto>,
-                                 val regeneration: List<ViitaContinuousDataDto>,
-                                 val stress: List<ViitaContinuousDataDto>,
-                                 val sleep: List<ViitaSleepDataDto>)
+data class ViitaFullDataResponse(
+    val activities: List<ViitaActivityDataResponse>,
+    val steps: List<ViitaHourlyDataDto>,
+    val calories: List<ViitaHourlyDataDto>,
+    val water: List<ViitaHourlyDataDto>,
+    val regeneration: List<ViitaContinuousDataDto>,
+    val stress: List<ViitaContinuousDataDto>,
+    val sleep: List<ViitaSleepDataDto>
+)

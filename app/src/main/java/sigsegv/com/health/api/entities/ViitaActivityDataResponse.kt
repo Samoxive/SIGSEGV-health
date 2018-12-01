@@ -12,15 +12,16 @@ package sigsegv.com.health.api.entities
 //distance: Int
 //altitude: Int
 
-data class ViitaActivityDataResponse(val watchId: Long,
-                                     val timestamp: Long,
-                                     val activityType: String,
-                                     val avgBpm: Int,
-                                     val maxBpm: Int,
-                                     val calories: Int,
-                                     val water: Int,
-                                     val duration: Long,
-                                     val steps: Int,
-                                     val distance: Int,
-                                     val altitude: Int
+data class ViitaActivityDataResponse(
+    val watchId: Long,
+    val timestamp: Long,
+    val activityType: String,
+    val avgBpm: Int,
+    val maxBpm: Int,
+    val calories: Int,
+    val water: Int,
+    val duration: Long,
+    val steps: Int,
+    val distance: Int,
+    val altitude: Int
 )

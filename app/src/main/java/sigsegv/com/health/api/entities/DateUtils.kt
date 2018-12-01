@@ -3,7 +3,7 @@ package sigsegv.com.health.api.entities
 import java.text.SimpleDateFormat
 import java.util.*
 
-data class ViitaTime (
+data class ViitaTime(
     val hours: Int,
     val minutes: Int,
     val seconds: Int,
