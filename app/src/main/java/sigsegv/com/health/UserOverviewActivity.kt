@@ -70,10 +70,12 @@ class UserOverviewActivity : AppCompatActivity() {
         }
 
         override fun getPageTitle(position: Int): CharSequence {
-            return if (position == 0) {
-                "Overview"
-            } else {
-                "Other"
+            when(position){
+                0 -> return "Overview"
+                1 -> return "Calories"
+                else -> {
+                    return "Other"
+                }
             }
         }
     }
