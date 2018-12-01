@@ -6,7 +6,10 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
+import kotlinx.android.synthetic.main.activity_user_overview.*
+import kotlinx.android.synthetic.main.activity_user_overview.view.*
 import sigsegv.com.health.api.entities.ViitaUserSettings
+import android.support.design.widget.TabLayout
 
 class UserOverviewActivity : AppCompatActivity() {
 
@@ -26,6 +29,8 @@ class UserOverviewActivity : AppCompatActivity() {
         mDemoCollectionPagerAdapter = UserInfoPagerAdapter(supportFragmentManager, data)
         mViewPager = findViewById(R.id.pager)
         mViewPager.adapter = mDemoCollectionPagerAdapter
+
+        tab_layout.setupWithViewPager(mViewPager)
 
     }
 
