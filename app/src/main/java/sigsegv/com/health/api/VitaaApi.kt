@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import okhttp3.*
 import sigsegv.com.health.api.entities.*
 
-private const val BASE_URL = "https://devportal.viita-watches.com/api/v1/"
+private const val BASE_URL = "https://devportal.viita-watches.com/api/v1"
 private val JSON_MEDIA = MediaType.parse("application/json")
 private val gson = Gson()
 private val http = OkHttpClient()
@@ -26,8 +26,8 @@ fun registerUserApi(email: String, password: String): ViitaSignInUserResponse {
         .post(RequestBody.create(JSON_MEDIA, gson.toJson(signInCommand)))
         .build()
     val response = http.newCall(request).execute()
-
-    return gson.fromJson(response.body()!!.string(), ViitaSignInUserResponse::class.java)
+    val signInData = gson.fromJson(response.body()!!.string(), ViitaSignInUserResponse::class.java).copy(token = response.header("X-Auth-Token")!!)
+    return signInData
 }
 
 fun fetchUserData(token: String): ViitaFullDataResponse {

@@ -25,7 +25,11 @@ private val gson = Gson()
 
 private fun <T> Context.withDatabase(block: (DB) -> T): T? {
     val db = DBFactory.open(this)
-    val value = try { block(db) } catch (e: Exception) { null }
+    val value = try {
+        block(db)
+    } catch (e: Exception) {
+        null
+    }
     db.close()
     return value
 }
