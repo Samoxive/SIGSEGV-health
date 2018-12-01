@@ -3,6 +3,7 @@ package sigsegv.com.health
 import android.graphics.Bitmap
 import android.widget.TextView
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -11,13 +12,25 @@ import android.view.LayoutInflater
 
 
 
-class UserListAdapter(val mUsers:List<UserList>) : RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
+class UserListAdapter(private val mUsers: List<UserList>): RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
+    val itemOnClick: (View, Int, Int) -> Unit = { view, position, type ->
+        Log.d("asd", "test")
+    }
+
+    fun <T : RecyclerView.ViewHolder> T.onClick(event: (view: View, position: Int, type: Int) -> Unit): T {
+        itemView.setOnClickListener {
+            event.invoke(it, adapterPosition, itemViewType)
+        }
+        return this
+    }
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
         val context = p0.context
         val inflater = LayoutInflater.from(context)
         val contactView = inflater.inflate(R.layout.item_user_selector, p0, false)
-        return ViewHolder(contactView)
+        val vH = ViewHolder(contactView)
+        vH.onClick(itemOnClick)
+        return vH
     }
 
     override fun getItemCount(): Int {
@@ -25,35 +38,24 @@ class UserListAdapter(val mUsers:List<UserList>) : RecyclerView.Adapter<UserList
     }
 
     override fun onBindViewHolder(p0: ViewHolder, p1: Int) {
-        val user = mUsers.get(p1)
+        val user = mUsers[p1]
 
         val textView = p0.nameTextView
         textView.text = user.userName
 
         val imageView = p0.userImageView
         imageView.setImageBitmap(user.userImage)
-
-        val button = p0.messageButton
-        button.text = "TEST"
-        button.isEnabled = true
     }
 
     inner class ViewHolder
         (itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        lateinit var userImageView: ImageView
-        var nameTextView: TextView
-        var messageButton: Button
+        var userImageView: ImageView = itemView.findViewById(R.id.user_image)
+        var nameTextView: TextView = itemView.findViewById(R.id.user_name)
 
-        init {
-            userImageView =  itemView.findViewById(R.id.user_image)
-            nameTextView = itemView.findViewById(R.id.user_name)
-            messageButton = itemView.findViewById(R.id.message_button) as Button
-        }
     }
 
 }
-
 
 data class UserList (
     val userName: String,
