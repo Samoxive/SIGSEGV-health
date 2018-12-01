@@ -5,7 +5,9 @@ import com.google.gson.Gson
 import com.snappydb.DB
 import com.snappydb.DBFactory
 import sigsegv.com.health.api.entities.SignInUserData
+import sigsegv.com.health.api.entities.UserData
 import sigsegv.com.health.api.entities.toSignInUserData
+import sigsegv.com.health.api.entities.toUserData
 
 val mockUsers = mapOf(
     "utanis@viita-concept.com" to "12345678",
@@ -36,19 +38,19 @@ private suspend fun putSignInDataIntoStore(context: Context, data: SignInUserDat
     context.withDatabase { it.put(data.user.email, gson.toJson(data)) }
 }
 
-suspend fun getAllUsers(context: Context): List<SignInUserData> {
-    val users = ArrayList<SignInUserData>()
-    for ((key, value) in mockUsers) {
-        val userFromStore = getSignInDataFromStore(context, key)
-        val user = if (userFromStore == null) {
-            val userData = registerUserApi(key, value).toSignInUserData()
-            putSignInDataIntoStore(context, userData)
-            userData
-        } else {
-            userFromStore
-        }
-        users.add(user)
-    }
+suspend fun getAllUsers(context: Context): List<SignInUserData> = mockUsers.map { getUser(context, it.key) }
 
-    return users
+suspend fun getUser(context: Context, email: String): SignInUserData {
+    val userFromStore = getSignInDataFromStore(context, email)
+
+    return if (userFromStore == null) {
+        val userData = registerUserApi(email, mockUsers[email]!!).toSignInUserData()
+        putSignInDataIntoStore(context, userData)
+        userData
+    } else {
+        userFromStore
+    }
 }
+
+suspend fun getUserData(signInData: SignInUserData): UserData = fetchUserData(signInData.token).toUserData()
+suspend fun getUserData(context: Context, email: String) = getUserData(getUser(context, email))
