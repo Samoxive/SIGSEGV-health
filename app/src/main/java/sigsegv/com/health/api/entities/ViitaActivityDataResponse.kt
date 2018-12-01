@@ -1,7 +1,5 @@
 package sigsegv.com.health.api.entities
 
-import java.util.*
-
 // watchId: Long
 //timestamp: DateTime
 //activityType: ActivityType
