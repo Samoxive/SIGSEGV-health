@@ -15,9 +15,6 @@ class UserListActivity : AppCompatActivity(), OnItemClickListener {
         setContentView(R.layout.activity_user_list)
 
         val rvUsers = rv_user_list
-        launch(UI, parent = rootParent) {
-            // ...
-        }
         val users = UserList.createMockObjects(20)
         val adapter = UserListAdapter(users, this)
 

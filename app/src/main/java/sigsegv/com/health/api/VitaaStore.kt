@@ -22,25 +22,25 @@ val mockUsers = mapOf(
 
 private val gson = Gson()
 
-private suspend fun <T> Context.withDatabase(block: (DB) -> T): T {
+private fun <T> Context.withDatabase(block: (DB) -> T): T {
     val db = DBFactory.open(this)
     val value = block(db)
     db.close()
     return value
 }
 
-private suspend fun getSignInDataFromStore(context: Context, email: String): SignInUserData? {
+private fun getSignInDataFromStore(context: Context, email: String): SignInUserData? {
     val getValue: String? = context.withDatabase { it.get(email) } ?: return null
     return gson.fromJson(getValue, SignInUserData::class.java)
 }
 
-private suspend fun putSignInDataIntoStore(context: Context, data: SignInUserData) {
+private fun putSignInDataIntoStore(context: Context, data: SignInUserData) {
     context.withDatabase { it.put(data.user.email, gson.toJson(data)) }
 }
 
-suspend fun getAllUsers(context: Context): List<SignInUserData> = mockUsers.map { getUser(context, it.key) }
+fun getAllUsers(context: Context): List<SignInUserData> = mockUsers.map { getUser(context, it.key) }
 
-suspend fun getUser(context: Context, email: String): SignInUserData {
+fun getUser(context: Context, email: String): SignInUserData {
     val userFromStore = getSignInDataFromStore(context, email)
 
     return if (userFromStore == null) {
@@ -52,5 +52,5 @@ suspend fun getUser(context: Context, email: String): SignInUserData {
     }
 }
 
-suspend fun getUserData(signInData: SignInUserData): UserData = fetchUserData(signInData.token).toUserData()
-suspend fun getUserData(context: Context, email: String) = getUserData(getUser(context, email))
+fun getUserData(signInData: SignInUserData): UserData = fetchUserData(signInData.token).toUserData()
+fun getUserData(context: Context, email: String) = getUserData(getUser(context, email))

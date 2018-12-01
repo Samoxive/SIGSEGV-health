@@ -18,26 +18,24 @@ private val defaultDeviceCommand = ViitaRegisterDeviceCommand(
     "tr-tr"
 )
 
-suspend fun Call.await() = this.execute()
-
-suspend fun registerUserApi(email: String, password: String): ViitaSignInUserResponse {
+fun registerUserApi(email: String, password: String): ViitaSignInUserResponse {
     val credentials = ViitaCredentials(email, password)
     val signInCommand = ViitaCompositeSignInCommand(credentials, defaultDeviceCommand)
     val request = Request.Builder()
         .url("$BASE_URL/auth/signin")
         .post(RequestBody.create(JSON_MEDIA, gson.toJson(signInCommand)))
         .build()
-    val response = http.newCall(request).await()
+    val response = http.newCall(request).execute()
 
     return gson.fromJson(response.body()!!.string(), ViitaSignInUserResponse::class.java)
 }
 
-suspend fun fetchUserData(token: String): ViitaFullDataResponse {
+fun fetchUserData(token: String): ViitaFullDataResponse {
     val request = Request.Builder()
         .url("$BASE_URL/data")
         .header("X-Auth-Token", token)
         .build()
-    val response = http.newCall(request).await()
+    val response = http.newCall(request).execute()
 
     return gson.fromJson(response.body()!!.string(), ViitaFullDataResponse::class.java)
 }
