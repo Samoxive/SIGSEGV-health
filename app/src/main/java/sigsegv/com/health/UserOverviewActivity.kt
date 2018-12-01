@@ -25,6 +25,10 @@ class UserOverviewActivity : AppCompatActivity() {
         heightText.text = data.height.toString() + " m"
         weightText.text = data.weight.toString() + " kg"
         missionText.text = data.userMission
+        dailyCaloriesVal.text = data.caloriesGoal.toString()
+        dailyStepsVal.text = data.stepsGoal.toString()
+        sleepTimeVal.text = data.sleepGoalStart
+        wakeTimeVal.text = data.sleepGoalEnd
     }
 
 

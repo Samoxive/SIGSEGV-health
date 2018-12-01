@@ -7,9 +7,19 @@
     <string name="stub_height">1.84 m</string>
     <string name="stub_weight">77 kg</string>
     <string name="stub_mission">Fitness</string>
+    <string name="stub_daily_running">10000</string>
+    <string name="stub_daily_calories">5000</string>
+    <string name="stub_sleep_time">23:30</string>
+    <string name="stub_wake_up">08:30</string>
     <string name="avatar_content_description">avatar of the user</string>
+    <string name="running_content_description">running person image</string>
+    <string name="fire_content_description">fire image</string>
     <string name="weight">Weight:</string>
     <string name="mission">Mission:</string>
     <string name="user_picture">User Picture</string>
+    <string name="daily_steps_goal">Daily Steps Goal:</string>
+    <string name="daily_calories_goal">Daily Calories Goal:</string>
+    <string name="sleep_time">Sleep Goal:</string>
+    <string name="wake_time">Wake Up Goal:</string>
 
 </resources>
