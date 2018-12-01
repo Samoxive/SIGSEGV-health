@@ -33,32 +33,28 @@ private const val ARG_WAKE_GOAL = "wake_goal"
  */
 class UserOverviewFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var name: String? = null
-    private var ageGenderVal: String? = null
+    private lateinit var name: String
+    private lateinit var ageGenderVal: String
     private var height: Int = 0
     private var weight: Int = 0
-    private var mission: String? = null
+    private lateinit var mission: String
     private var dailyStepGoal: Int = 0
     private var dailyCalorieGoal: Int = 0
-    private var sleepGoal: String? = null
-    private var wakeGoal: String? = null
-
-
-
-    private var listener: OnFragmentInteractionListener? = null
+    private lateinit var sleepGoal: String
+    private lateinit var wakeGoal: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            name = it.getString(ARG_NAME)
-            ageGenderVal = it.getString(ARG_AGE_GENDER)
+            name = it.getString(ARG_NAME)!!
+            ageGenderVal = it.getString(ARG_AGE_GENDER)!!
             height = it.getInt(ARG_HEIGHT)
             weight = it.getInt(ARG_WEIGHT)
-            mission = it.getString(ARG_MISSION)
+            mission = it.getString(ARG_MISSION)!!
             dailyStepGoal = it.getInt(ARG_DAILY_STEP_GOAL)
             dailyCalorieGoal = it.getInt(ARG_DAILY_CALORIE_GOAL)
-            sleepGoal = it.getString(ARG_SLEEP_GOAL)
-            wakeGoal = it.getString(ARG_WAKE_GOAL)
+            sleepGoal = it.getString(ARG_SLEEP_GOAL)!!
+            wakeGoal = it.getString(ARG_WAKE_GOAL)!!
         }
 
         nameUser.text = name
@@ -80,43 +76,7 @@ class UserOverviewFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_user_overview, container, false)
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
-    interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
-    }
-
     companion object {
-
         @JvmStatic
         fun newInstance(name: String, ageGender: String,
                       height: Int, weight: Int, mission : String,

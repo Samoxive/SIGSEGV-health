@@ -7,10 +7,8 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import sigsegv.com.health.api.entities.ViitaUserSettings
-import java.lang.Exception
 
 class UserOverviewActivity : AppCompatActivity() {
-
 
     private lateinit var mDemoCollectionPagerAdapter: UserInfoPagerAdapter
     private lateinit var mViewPager: ViewPager
@@ -22,54 +20,46 @@ class UserOverviewActivity : AppCompatActivity() {
         val email: String
         if (bundle?.getString("email") != null){
             email = bundle.getString("email")!!
-            val data = stubFunc(email)
-            mDemoCollectionPagerAdapter = UserInfoPagerAdapter(supportFragmentManager, data)
-            mViewPager = findViewById(R.id.pager)
-            mViewPager.adapter = mDemoCollectionPagerAdapter
         }
+        //TODO TIE IT
+        val data = stubFunc("some val")
+        mDemoCollectionPagerAdapter = UserInfoPagerAdapter(supportFragmentManager, data)
+        mViewPager = findViewById(R.id.pager)
+        mViewPager.adapter = mDemoCollectionPagerAdapter
+
     }
 
     fun stubFunc(email: String): ViitaUserSettings {
-        //TODO will be implemented
         return ViitaUserSettings(
             "Hamdi Burak", "Usul",
             "07.11.1997", 78, 184, "male",
             "fitness", "11:30 pm", "08:30 am",
-            10000, 5000
+            10000, 1000
         )
     }
 
 
-    class UserInfoPagerAdapter(fm: FragmentManager, data: ViitaUserSettings) : FragmentPagerAdapter(fm) {
-
-        private var userSettingData: ViitaUserSettings? = null
-
-
-        fun UserInfoPagerAdapter(fm: FragmentManager, data: ViitaUserSettings) {
-            userSettingData = data
-        }
-
+    class UserInfoPagerAdapter(private val fm: FragmentManager, val data: ViitaUserSettings) : FragmentPagerAdapter(fm) {
 
         override fun getCount(): Int = 4
 
         fun calcAge(birthDate: String): Int {
-            //TODO Implement this
             return 21
         }
 
         override fun getItem(i: Int): Fragment {
             val fragment = UserOverviewFragment()
             fragment.arguments = Bundle().apply {
-                putString("name", userSettingData?.firstName + " " + userSettingData?.lastName)
-                val age = calcAge(userSettingData?.dateOfBirth!!)
-                putString("age_and_gender", age.toString() + " " + userSettingData?.gender)
-                putInt("height", userSettingData?.height!!)
-                putInt("weight", userSettingData?.weight!!)
-                putString("mission", userSettingData?.userMission!!)
-                putInt("daily_step_goal", userSettingData?.stepsGoal!!)
-                putInt("daily_calorie_goal", userSettingData?.caloriesGoal!!)
-                putString("sleep_goal", userSettingData?.sleepGoalStart)
-                putString("wake_goal", userSettingData?.sleepGoalEnd)
+                putString("name", data.firstName + " " + data.lastName)
+                val age = calcAge(data.dateOfBirth)
+                putString("age_and_gender", age.toString() + " " + data.gender)
+                putInt("height", data.height)
+                putInt("weight", data.weight)
+                putString("mission", data.userMission)
+                putInt("daily_step_goal", data.stepsGoal)
+                putInt("daily_calorie_goal", data.caloriesGoal)
+                putString("sleep_goal", data.sleepGoalStart)
+                putString("wake_goal", data.sleepGoalEnd)
             }
             return fragment
         }
