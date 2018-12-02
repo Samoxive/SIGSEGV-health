@@ -10,6 +10,11 @@ import kotlinx.android.synthetic.main.activity_user_overview.*
 import kotlinx.android.synthetic.main.activity_user_overview.view.*
 import sigsegv.com.health.api.entities.ViitaUserSettings
 import android.support.design.widget.TabLayout
+import sigsegv.com.health.api.entities.UserSettings
+import sigsegv.com.health.api.entities.toDate
+import sigsegv.com.health.api.entities.toViitaTime
+import sigsegv.com.health.api.getUser
+import java.util.*
 
 class UserOverviewActivity : AppCompatActivity() {
 
@@ -20,35 +25,46 @@ class UserOverviewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_overview)
         val bundle = intent.extras
-        val email: String
+        var email: String = "blank"
         if (bundle?.getString("email") != null){
             email = bundle.getString("email")!!
         }
-        //TODO TIE IT
-        val data = stubFunc("some val")
+        val data = stubFunc()
         mDemoCollectionPagerAdapter = UserInfoPagerAdapter(supportFragmentManager, data)
         mViewPager = findViewById(R.id.pager)
         mViewPager.adapter = mDemoCollectionPagerAdapter
 
+        AsyncAction({ getUser(this@UserOverviewActivity, email)}, {r -> mDemoCollectionPagerAdapter.changeData(r.settings.userSettings) })
+
+
+
         tab_layout.setupWithViewPager(mViewPager)
+
+
 
     }
 
-    fun stubFunc(email: String): ViitaUserSettings {
-        return ViitaUserSettings(
+    fun stubFunc(): UserSettings {
+        return UserSettings("Hamdi Burak", "Usul",
+            "07.11.1997".toDate(), 78, 184, "male",
+            "fitness", "23:00:00.000".toViitaTime(), "08:30:00.000".toViitaTime(),
+            10000, 1000)
+
+        /*return ViitaUserSettings(
             "Hamdi Burak", "Usul",
             "07.11.1997", 78, 184, "male",
             "fitness", "11:30 pm", "08:30 am",
             10000, 1000
-        )
+        )*/
     }
 
 
-    class UserInfoPagerAdapter(private val fm: FragmentManager, val data: ViitaUserSettings) : FragmentPagerAdapter(fm) {
+    class UserInfoPagerAdapter(private val fm: FragmentManager, var data: UserSettings) : FragmentPagerAdapter(fm) {
 
         override fun getCount(): Int = 4
 
-        fun calcAge(birthDate: String): Int {
+        fun calcAge(birthDate: Date): Int {
+            //todo implement
             return 21
         }
 
@@ -63,10 +79,15 @@ class UserOverviewActivity : AppCompatActivity() {
                 putString("mission", data.userMission)
                 putInt("daily_step_goal", data.stepsGoal)
                 putInt("daily_calorie_goal", data.caloriesGoal)
-                putString("sleep_goal", data.sleepGoalStart)
-                putString("wake_goal", data.sleepGoalEnd)
+                putString("sleep_goal", data.sleepGoalStart.toString())
+                putString("wake_goal", data.sleepGoalEnd.toString())
             }
             return fragment
+        }
+
+        fun changeData(data : UserSettings){
+            this.data = data
+            this.notifyDataSetChanged()
         }
 
         override fun getPageTitle(position: Int): CharSequence {
