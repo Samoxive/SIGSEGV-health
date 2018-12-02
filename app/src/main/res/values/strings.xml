@@ -23,6 +23,8 @@
     <string name="wake_time">Wake Up Goal:</string>
     <string name="profile_picture">Profile Picture</string>
     <string name="border">Border</string>
+    <string name="overview_title">Overview</string>
+    <string name="notes_title">You can take notes for your trainee here.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

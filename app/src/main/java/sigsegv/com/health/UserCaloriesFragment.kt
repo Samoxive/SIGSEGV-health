@@ -4,10 +4,10 @@ package sigsegv.com.health
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import com.github.mikephil.charting.data.*
@@ -50,11 +50,18 @@ class UserCaloriesFragment : Fragment() {
             val arr : Array<String> = Array<String>(dates.size, {r -> dates.get(r) })
             val adapter : ArrayAdapter<String> = ArrayAdapter<String>(context!!, android.R.layout.simple_spinner_item, arr)
             spinner.adapter = adapter
-            spinner.setOnItemClickListener { parent, view, position, id -> run{
-                showIndex = position
-                if(showDaily)
-                    drawChart()
-            } }
+            spinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                }
+
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    showIndex = position
+                    if(showDaily)
+                        drawChart()
+                }
+
+            }
         }
         
         super.onViewCreated(view, savedInstanceState)
@@ -63,6 +70,12 @@ class UserCaloriesFragment : Fragment() {
     private fun drawChart(){
         if(showDaily){
             val values : List<Int> = dateValueMap.get(showIndex).second
+            var total: Int = 0
+            for (i in 0..values.size-1){
+                total = total + values[i]
+            }
+            var avg:Int = total/values.size
+            textView2.text="Average: $avg"
             val entries = ArrayList<BarEntry>()
             for ((ct, i) in values.withIndex())
                 entries.add(BarEntry(i.toFloat(), ct.toFloat()))
