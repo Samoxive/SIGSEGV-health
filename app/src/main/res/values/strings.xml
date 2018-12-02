@@ -21,6 +21,8 @@
     <string name="daily_calories_goal">Daily Calories Goal:</string>
     <string name="sleep_time">Sleep Goal:</string>
     <string name="wake_time">Wake Up Goal:</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="border">Border</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
