@@ -34,7 +34,8 @@
     <string name="bmi_obesity">Obesity</string>
     <string name="todays_focus_label">Today\'s focus:</string>
     <string name="stub_focus">Chests and Triceps</string>
-    
+    <string name="average_value">Average: %d</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
