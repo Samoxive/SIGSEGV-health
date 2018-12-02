@@ -16,6 +16,7 @@ import sigsegv.com.health.api.getUser
 import sigsegv.com.health.api.getUserData
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.locks.ReentrantLock
 import kotlin.collections.ArrayList
 
 class UserOverviewActivity : AppCompatActivity() {
@@ -27,37 +28,47 @@ class UserOverviewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_overview)
         val bundle = intent.extras
-        var email: String = "blank"
+        var email = "blank"
         if (bundle?.getString("email") != null) {
             email = bundle.getString("email")!!
         }
 
-        val stubUserSettingData = generateStubUserSettingData()
+        val lock = ReentrantLock()
+        var filled = 0
+
+        var userData: UserData? = null
+        var userSettings: UserSettings? = null
 
         AsyncAction({ getUser(this@UserOverviewActivity, email) }, { r ->
-            mDemoCollectionPagerAdapter.changeUserSettings(r.settings.userSettings)
+            run {
+                userSettings = r.settings.userSettings
+                lock.lock()
+                filled++
+                if (filled == 2) {
+                    mDemoCollectionPagerAdapter = UserInfoPagerAdapter(supportFragmentManager, userSettings!!, userData)
+                    mViewPager = findViewById(R.id.pager)
+                    mViewPager.adapter = mDemoCollectionPagerAdapter
+                    tab_layout.setupWithViewPager(mViewPager)
+                }
+                lock.unlock()
+
+            }
         })
         AsyncAction({ getUserData(this@UserOverviewActivity, email) }, { r ->
-            mDemoCollectionPagerAdapter.changeUserData(r)
+            run {
+                userData = r
+                lock.lock()
+                filled++
+                if (filled == 2) {
+                    mDemoCollectionPagerAdapter = UserInfoPagerAdapter(supportFragmentManager, userSettings!!, userData)
+                    mViewPager = findViewById(R.id.pager)
+                    mViewPager.adapter = mDemoCollectionPagerAdapter
+                    tab_layout.setupWithViewPager(mViewPager)
+                }
+                lock.unlock()
+            }
         })
 
-        Thread.sleep(700)
-
-        mDemoCollectionPagerAdapter = UserInfoPagerAdapter(supportFragmentManager, stubUserSettingData, null)
-        mViewPager = findViewById(R.id.pager)
-        mViewPager.adapter = mDemoCollectionPagerAdapter
-
-        tab_layout.setupWithViewPager(mViewPager)
-
-    }
-
-    fun generateStubUserSettingData(): UserSettings {
-        return UserSettings(
-            "Hamdi Burak", "Usul",
-            "1997-01-02".toDate(), 78, 184, "male",
-            "fitness", "23:00:00.000".toViitaTime(), "08:30:00.000".toViitaTime(),
-            10000, 1000
-        )
     }
 
     class UserInfoPagerAdapter(
@@ -68,7 +79,7 @@ class UserOverviewActivity : AppCompatActivity() {
 
         override fun getCount(): Int = 4
 
-        private var last : UserCaloriesFragment? = null
+        private var last: UserCaloriesFragment? = null
 
         fun calcAge(birthDate: Date): Int {
             //todo implement
@@ -89,7 +100,6 @@ class UserOverviewActivity : AppCompatActivity() {
             val format = SimpleDateFormat("yyyy-MM-dd")
             return format.format(dt)
         }
-
 
 
         override fun getItem(i: Int): Fragment {
@@ -124,19 +134,7 @@ class UserOverviewActivity : AppCompatActivity() {
                 return fragment
             }
         }
-
-        fun changeUserSettings(data: UserSettings) {
-            this.userSettings = data
-            this.notifyDataSetChanged()
-        }
-
-        fun changeUserData(data: UserData) {
-            this.userData = data
-
-            this.notifyDataSetChanged()
-            last?.calories_bar_chart?.invalidate()
-        }
-
+        
         override fun getPageTitle(position: Int): CharSequence {
             return when (position) {
                 0 -> "Overview"
