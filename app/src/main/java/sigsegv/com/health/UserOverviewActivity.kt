@@ -6,11 +6,9 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
-import android.view.View
-import android.view.ViewGroup
-import com.github.mikephil.charting.charts.BarChart
 import kotlinx.android.synthetic.main.activity_user_overview.*
-import kotlinx.android.synthetic.main.fragment_user_calories.*
+import org.joda.time.DateTime
+import org.joda.time.Years
 import sigsegv.com.health.api.entities.*
 import sigsegv.com.health.api.getUser
 import sigsegv.com.health.api.getUserData
@@ -82,8 +80,9 @@ class UserOverviewActivity : AppCompatActivity() {
         private var last: UserCaloriesFragment? = null
 
         fun calcAge(birthDate: Date): Int {
-            //todo implement
-            return 21
+            val now  = DateTime(Calendar.getInstance().time)
+            val then = DateTime(birthDate)
+            return Years.yearsBetween(now, then).years
         }
 
 
@@ -134,7 +133,7 @@ class UserOverviewActivity : AppCompatActivity() {
                 return fragment
             }
         }
-        
+
         override fun getPageTitle(position: Int): CharSequence {
             return when (position) {
                 0 -> "Overview"
