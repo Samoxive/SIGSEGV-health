@@ -18,7 +18,7 @@ class UserListActivity : AppCompatActivity(), OnItemClickListener {
         val rvUsers = rv_user_list
 
         val adapter = UserListAdapter(listOf(), this)
-        AsyncAction({ getAllUsers(this@UserListActivity) }, {users -> adapter.setData(users)})
+        AsyncAction({ getAllUsers(this@UserListActivity) }, {users -> adapter.setData(users) })
 
 
         rvUsers.adapter = adapter

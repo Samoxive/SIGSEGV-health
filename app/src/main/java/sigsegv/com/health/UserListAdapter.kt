@@ -12,6 +12,13 @@ interface OnItemClickListener{
     fun onClick(users: List<SignInUserData>, itemPosition: Int)
 }
 
+class SignInUserDataComparetor : Comparator<SignInUserData>{
+    override fun compare(o1: SignInUserData, o2: SignInUserData): Int {
+        return o1.settings.userSettings.firstName.compareTo(o2.settings.userSettings.firstName)
+    }
+
+}
+
 class UserListAdapter(private var mUsers: List<SignInUserData>, private val clickListener: OnItemClickListener): RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
@@ -27,9 +34,15 @@ class UserListAdapter(private var mUsers: List<SignInUserData>, private val clic
     }
 
     fun setData(mUsers: List<SignInUserData>){
-        this.mUsers = mUsers
+        val sortedUsers : List<SignInUserData> =
+            mUsers.sortedWith(SignInUserDataComparetor()) //sorted according to the first name
+        this.mUsers = sortedUsers
         this.notifyDataSetChanged()
     }
+
+
+
+
     override fun getItemCount(): Int {
         return mUsers.size
     }
