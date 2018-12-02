@@ -23,6 +23,7 @@ val mockUsers = mapOf(
 
 private val gson = Gson()
 
+@Synchronized
 private fun <T> Context.withDatabase(block: (DB) -> T): T? {
     val db = DBFactory.open(this)
     val value = try {
