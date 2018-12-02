@@ -3,6 +3,7 @@ package sigsegv.com.health
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,10 +48,16 @@ class UserCaloriesFragment : Fragment() {
             }
 
             var dataset  = BarDataSet(entries, "Label")
+            dataset.color = ContextCompat.getColor(this.context!!, R.color.colorPrimary)
             var barData  = BarData(dataset)
+            barData.barWidth = 10f
 
             calories_bar_chart.data = barData
+            //calories_bar_chart.setMaxVisibleValueCount(12)
             calories_bar_chart.invalidate()
+            calories_bar_chart.setDrawBarShadow(false)
+            calories_bar_chart.setDrawValueAboveBar(true)
+            calories_bar_chart.description.isEnabled = false
         }
         super.onViewCreated(view, savedInstanceState)
     }
