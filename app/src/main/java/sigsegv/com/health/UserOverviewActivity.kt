@@ -6,7 +6,11 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
+import android.view.View
+import android.view.ViewGroup
+import com.github.mikephil.charting.charts.BarChart
 import kotlinx.android.synthetic.main.activity_user_overview.*
+import kotlinx.android.synthetic.main.fragment_user_calories.*
 import sigsegv.com.health.api.entities.*
 import sigsegv.com.health.api.getUser
 import sigsegv.com.health.api.getUserData
@@ -24,7 +28,7 @@ class UserOverviewActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user_overview)
         val bundle = intent.extras
         var email: String = "blank"
-        if (bundle?.getString("email") != null){
+        if (bundle?.getString("email") != null) {
             email = bundle.getString("email")!!
         }
 
@@ -34,20 +38,31 @@ class UserOverviewActivity : AppCompatActivity() {
         mViewPager = findViewById(R.id.pager)
         mViewPager.adapter = mDemoCollectionPagerAdapter
 
-        AsyncAction({ getUser(this@UserOverviewActivity, email)}, {r -> mDemoCollectionPagerAdapter.changeUserSettings(r.settings.userSettings) })
-        AsyncAction({ getUserData(this@UserOverviewActivity, email)}, {r ->  mDemoCollectionPagerAdapter.changeUserData(r) })
-
+        AsyncAction({ getUser(this@UserOverviewActivity, email) }, { r ->
+            mDemoCollectionPagerAdapter.changeUserSettings(r.settings.userSettings)
+        })
+        AsyncAction({ getUserData(this@UserOverviewActivity, email) }, { r ->
+            mDemoCollectionPagerAdapter.changeUserData(r)
+            mViewPager.findViewWithTag<View>("dalga").findViewById<BarChart>(R.id.calories_bar_chart).invalidate()
+        })
         tab_layout.setupWithViewPager(mViewPager)
+
     }
 
     fun generateStubUserSettingData(): UserSettings {
-        return UserSettings("Hamdi Burak", "Usul",
+        return UserSettings(
+            "Hamdi Burak", "Usul",
             "1997-01-02".toDate(), 78, 184, "male",
             "fitness", "23:00:00.000".toViitaTime(), "08:30:00.000".toViitaTime(),
-            10000, 1000)
+            10000, 1000
+        )
     }
 
-    class UserInfoPagerAdapter(private val fm: FragmentManager, var userSettings: UserSettings, var userData : UserData?) : FragmentPagerAdapter(fm) {
+    class UserInfoPagerAdapter(
+        private val fm: FragmentManager,
+        var userSettings: UserSettings,
+        var userData: UserData?
+    ) : FragmentPagerAdapter(fm) {
 
         override fun getCount(): Int = 4
 
@@ -57,35 +72,42 @@ class UserOverviewActivity : AppCompatActivity() {
         }
 
 
-        fun getDateList(v : List<HourlyDataDto>) : ArrayList<String>{
+        fun getDateList(v: List<HourlyDataDto>): ArrayList<String> {
             val format = SimpleDateFormat("yyyy-MM-dd")
-            val retVal : ArrayList<String> = ArrayList()
-            for (item in v){
+            val retVal: ArrayList<String> = ArrayList()
+            for (item in v) {
                 retVal.add(format.format(item.date))
             }
             return retVal
         }
 
-        fun getSingleStr(dt : Date) : String{
+        fun getSingleStr(dt: Date): String {
             val format = SimpleDateFormat("yyyy-MM-dd")
             return format.format(dt)
         }
 
+
+        override fun instantiateItem(container: ViewGroup, position: Int): Any {
+            if(position == 1)
+                container.tag = "dalga"
+            return super.instantiateItem(container, position)
+        }
+
         override fun getItem(i: Int): Fragment {
-            if(i == 1){
+            if (i == 1) {
                 val fragment = UserCaloriesFragment()
                 val local = userData
-                if(local != null){
-                    val hourlyDataDtoList : List<HourlyDataDto> = local.calories
+                if (local != null) {
+                    val hourlyDataDtoList: List<HourlyDataDto> = local.calories
                     fragment.arguments = Bundle().apply {
-                      putStringArrayList("dates", getDateList(hourlyDataDtoList))
-                        for(item in hourlyDataDtoList){
+                        putStringArrayList("dates", getDateList(hourlyDataDtoList))
+                        for (item in hourlyDataDtoList) {
                             putIntegerArrayList(getSingleStr(item.date), item.values as java.util.ArrayList<Int>)
                         }
                     }
                 }
                 return fragment
-            }else{
+            } else {
                 val fragment = UserOverviewFragment()
                 fragment.arguments = Bundle().apply {
                     putString("name", userSettings.firstName + " " + userSettings.lastName)
@@ -103,18 +125,18 @@ class UserOverviewActivity : AppCompatActivity() {
             }
         }
 
-        fun changeUserSettings(data : UserSettings){
+        fun changeUserSettings(data: UserSettings) {
             this.userSettings = data
             this.notifyDataSetChanged()
         }
 
-        fun changeUserData(data : UserData){
+        fun changeUserData(data: UserData) {
             this.userData = data
             this.notifyDataSetChanged()
         }
 
         override fun getPageTitle(position: Int): CharSequence {
-            when(position){
+            when (position) {
                 0 -> return "Overview"
                 1 -> return "Calories"
                 else -> {
