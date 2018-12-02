@@ -7,10 +7,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import kotlinx.android.synthetic.main.activity_user_overview.*
-import sigsegv.com.health.api.entities.UserData
-import sigsegv.com.health.api.entities.UserSettings
-import sigsegv.com.health.api.entities.toDate
-import sigsegv.com.health.api.entities.toViitaTime
+import sigsegv.com.health.api.entities.*
 import sigsegv.com.health.api.getUser
 import sigsegv.com.health.api.getUserData
 import java.util.*
@@ -73,8 +70,8 @@ class UserOverviewActivity : AppCompatActivity() {
                     putString("mission", userSettings.userMission)
                     putInt("daily_step_goal", userSettings.stepsGoal)
                     putInt("daily_calorie_goal", userSettings.caloriesGoal)
-                    putString("sleep_goal", userSettings.sleepGoalStart.toString())
-                    putString("wake_goal", userSettings.sleepGoalEnd.toString())
+                    putString("sleep_goal", userSettings.sleepGoalStart.toText())
+                    putString("wake_goal", userSettings.sleepGoalEnd.toText())
                 }
                 return fragment
             }else{
@@ -88,8 +85,8 @@ class UserOverviewActivity : AppCompatActivity() {
                     putString("mission", userSettings.userMission)
                     putInt("daily_step_goal", userSettings.stepsGoal)
                     putInt("daily_calorie_goal", userSettings.caloriesGoal)
-                    putString("sleep_goal", userSettings.sleepGoalStart.toString())
-                    putString("wake_goal", userSettings.sleepGoalEnd.toString())
+                    putString("sleep_goal", userSettings.sleepGoalStart.toText())
+                    putString("wake_goal", userSettings.sleepGoalEnd.toText())
                 }
                 return fragment
             }
