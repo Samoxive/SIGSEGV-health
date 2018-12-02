@@ -17,6 +17,9 @@
     <string name="weight">Weight:</string>
     <string name="mission">Mission:</string>
     <string name="user_picture">User Picture</string>
+    <string name="bmi">BMI</string>
+    <string name="stub_bmi">23.5</string>
+    <string name="body_mass_index">Body Mass Index:</string>
     <string name="daily_steps_goal">Daily Steps Goal:</string>
     <string name="daily_calories_goal">Daily Calories Goal:</string>
     <string name="sleep_time">Sleep Goal:</string>
@@ -25,7 +28,11 @@
     <string name="border">Border</string>
     <string name="overview_title">Overview</string>
     <string name="notes_title">You can take notes for your trainee here.</string>
-
+    <string name="bmi_underweight">Underweight</string>
+    <string name="bmi_normal_weight">Normal Weight</string>
+    <string name="bmi_overweight">Overweight</string>
+    <string name="bmi_obesity">Obesity</string>
+    
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

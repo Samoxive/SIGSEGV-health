@@ -67,16 +67,32 @@ class UserOverviewFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_user_overview, container, false)
     }
 
+    fun Double.format(digits: Int) = java.lang.String.format("%.${digits}f", this)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         nameUser.text = name
         ageGender.text = ageGenderVal
-        heightText.text = height.toString() + " m"
+        heightText.text = height.toString() + " cm"
         weightText.text = weight.toString() + " kg"
         missionText.text = mission
         dailyCaloriesVal.text = dailyCalorieGoal.toString()
         dailyStepsVal.text = dailyStepGoal.toString()
         sleepTimeVal.text = sleepGoal
         wakeTimeVal.text = wakeGoal
+        var heightInMeters = height.toDouble()
+        while(heightInMeters >= 10) heightInMeters /= 10
+        val bmi = weight.toDouble() / (heightInMeters * heightInMeters)
+        bmiValue.text = bmi.format(2)
+
+        if(bmi <= 18.5)
+            bmiMeaning.text = context!!.getText(R.string.bmi_underweight)
+        else if(bmi <= 24.9)
+            bmiMeaning.text = context!!.getText(R.string.bmi_normal_weight)
+        else if(bmi <= 29.9)
+            bmiMeaning.text = context!!.getText(R.string.bmi_overweight)
+        else
+            bmiMeaning.text = context!!.getText(R.string.bmi_obesity)
+
         super.onViewCreated(view, savedInstanceState)
     }
 
