@@ -10,7 +10,9 @@ import kotlinx.android.synthetic.main.activity_user_overview.*
 import sigsegv.com.health.api.entities.*
 import sigsegv.com.health.api.getUser
 import sigsegv.com.health.api.getUserData
+import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class UserOverviewActivity : AppCompatActivity() {
 
@@ -28,18 +30,14 @@ class UserOverviewActivity : AppCompatActivity() {
 
         val stubUserSettingData = generateStubUserSettingData()
 
-        mDemoCollectionPagerAdapter = UserInfoPagerAdapter(supportFragmentManager, stubUserSettingData)
+        mDemoCollectionPagerAdapter = UserInfoPagerAdapter(supportFragmentManager, stubUserSettingData, null)
         mViewPager = findViewById(R.id.pager)
         mViewPager.adapter = mDemoCollectionPagerAdapter
 
         AsyncAction({ getUser(this@UserOverviewActivity, email)}, {r -> mDemoCollectionPagerAdapter.changeUserSettings(r.settings.userSettings) })
-        AsyncAction({ getUserData(this@UserOverviewActivity, email)}, {r ->  debugFunc(r) })
+        AsyncAction({ getUserData(this@UserOverviewActivity, email)}, {r ->  mDemoCollectionPagerAdapter.changeUserData(r) })
 
         tab_layout.setupWithViewPager(mViewPager)
-    }
-
-    fun debugFunc(data : UserData){
-
     }
 
     fun generateStubUserSettingData(): UserSettings {
@@ -49,7 +47,7 @@ class UserOverviewActivity : AppCompatActivity() {
             10000, 1000)
     }
 
-    class UserInfoPagerAdapter(private val fm: FragmentManager, var userSettings: UserSettings) : FragmentPagerAdapter(fm) {
+    class UserInfoPagerAdapter(private val fm: FragmentManager, var userSettings: UserSettings, var userData : UserData?) : FragmentPagerAdapter(fm) {
 
         override fun getCount(): Int = 4
 
@@ -58,20 +56,33 @@ class UserOverviewActivity : AppCompatActivity() {
             return 21
         }
 
+
+        fun getDateList(v : List<HourlyDataDto>) : ArrayList<String>{
+            val format = SimpleDateFormat("yyyy-MM-dd")
+            val retVal : ArrayList<String> = ArrayList()
+            for (item in v){
+                retVal.add(format.format(item.date))
+            }
+            return retVal
+        }
+
+        fun getSingleStr(dt : Date) : String{
+            val format = SimpleDateFormat("yyyy-MM-dd")
+            return format.format(dt)
+        }
+
         override fun getItem(i: Int): Fragment {
             if(i == 1){
-                val fragment = UserOverviewFragment()
-                fragment.arguments = Bundle().apply {
-                    putString("name", userSettings.firstName + " " + userSettings.lastName)
-                    val age = calcAge(userSettings.dateOfBirth)
-                    putString("age_and_gender", age.toString() + " " + userSettings.gender)
-                    putInt("height", userSettings.height)
-                    putInt("weight", userSettings.weight)
-                    putString("mission", userSettings.userMission)
-                    putInt("daily_step_goal", userSettings.stepsGoal)
-                    putInt("daily_calorie_goal", userSettings.caloriesGoal)
-                    putString("sleep_goal", userSettings.sleepGoalStart.toText())
-                    putString("wake_goal", userSettings.sleepGoalEnd.toText())
+                val fragment = UserCaloriesFragment()
+                val local = userData
+                if(local != null){
+                    val hourlyDataDtoList : List<HourlyDataDto> = local.calories
+                    fragment.arguments = Bundle().apply {
+                      putStringArrayList("dates", getDateList(hourlyDataDtoList))
+                        for(item in hourlyDataDtoList){
+                            putIntegerArrayList(getSingleStr(item.date), item.values as java.util.ArrayList<Int>)
+                        }
+                    }
                 }
                 return fragment
             }else{
@@ -94,6 +105,11 @@ class UserOverviewActivity : AppCompatActivity() {
 
         fun changeUserSettings(data : UserSettings){
             this.userSettings = data
+            this.notifyDataSetChanged()
+        }
+
+        fun changeUserData(data : UserData){
+            this.userData = data
             this.notifyDataSetChanged()
         }
 
