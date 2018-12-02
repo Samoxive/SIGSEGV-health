@@ -21,12 +21,13 @@ class UserOverviewActivity : AppCompatActivity() {
 
     private lateinit var mDemoCollectionPagerAdapter: UserInfoPagerAdapter
     private lateinit var mViewPager: ViewPager
+    lateinit var email: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_overview)
         val bundle = intent.extras
-        var email = "blank"
+        email = "blank"
         if (bundle?.getString("email") != null) {
             email = bundle.getString("email")!!
         }
