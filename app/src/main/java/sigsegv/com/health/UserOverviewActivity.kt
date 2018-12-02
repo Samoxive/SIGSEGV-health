@@ -43,7 +43,6 @@ class UserOverviewActivity : AppCompatActivity() {
         })
         AsyncAction({ getUserData(this@UserOverviewActivity, email) }, { r ->
             mDemoCollectionPagerAdapter.changeUserData(r)
-            mViewPager.findViewWithTag<View>("dalga").findViewById<BarChart>(R.id.calories_bar_chart).invalidate()
         })
         tab_layout.setupWithViewPager(mViewPager)
 
@@ -66,6 +65,8 @@ class UserOverviewActivity : AppCompatActivity() {
 
         override fun getCount(): Int = 4
 
+        private var last : UserCaloriesFragment? = null
+
         fun calcAge(birthDate: Date): Int {
             //todo implement
             return 21
@@ -87,11 +88,6 @@ class UserOverviewActivity : AppCompatActivity() {
         }
 
 
-        override fun instantiateItem(container: ViewGroup, position: Int): Any {
-            if(position == 1)
-                container.tag = "dalga"
-            return super.instantiateItem(container, position)
-        }
 
         override fun getItem(i: Int): Fragment {
             if (i == 1) {
@@ -106,6 +102,7 @@ class UserOverviewActivity : AppCompatActivity() {
                         }
                     }
                 }
+                last = fragment
                 return fragment
             } else {
                 val fragment = UserOverviewFragment()
@@ -132,14 +129,8 @@ class UserOverviewActivity : AppCompatActivity() {
 
         fun changeUserData(data: UserData) {
             this.userData = data
+            last?.calories_bar_chart?.invalidate()
             this.notifyDataSetChanged()
-        }
-
-        override fun getItemPosition(`object`: Any): Int {
-            if(`object` is UserCaloriesFragment){
-                `object`.calories_bar_chart.invalidate()
-            }
-            return super.getItemPosition(`object`)
         }
 
         override fun getPageTitle(position: Int): CharSequence {
