@@ -57,6 +57,7 @@ class UserNoteFragment : Fragment() {
         val act = activity!! as UserOverviewActivity
         val email = act.email
         val editText = act.findViewById<EditText>(R.id.noteText)
+        editText.setText(getUserNote(context!!, email))
         val resetButton = act.findViewById<Button>(R.id.resetBtn)
         val setButton = act.findViewById<Button>(R.id.setBtn)
         resetButton.setOnClickListener {
