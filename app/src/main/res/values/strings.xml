@@ -27,7 +27,7 @@
     <string name="profile_picture">Profile Picture</string>
     <string name="border">Border</string>
     <string name="overview_title">Overview</string>
-    <string name="notes_title">You can take notes for your trainee here.</string>
+    <string name="notes_title">Your notes</string>
     <string name="bmi_underweight">Underweight</string>
     <string name="bmi_normal_weight">Normal Weight</string>
     <string name="bmi_overweight">Overweight</string>
