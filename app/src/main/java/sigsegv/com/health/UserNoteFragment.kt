@@ -27,16 +27,9 @@ private const val ARG_EMAIL = "email"
  */
 
 class UserNoteFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private lateinit var note: Editable
-    private lateinit var email: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            note = it.getCharSequence(ARG_NOTE)!! as Editable
-            email = it.getString(ARG_EMAIL)!!
-        }
     }
 
     override fun onCreateView(
