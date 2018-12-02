@@ -38,20 +38,20 @@ class UserCaloriesFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        if(dateValueMap.size!=0){
+            val values : List<Int> = dateValueMap.get(showIndex).second
+            var entries = ArrayList<BarEntry>()
 
-        val values : List<Int> = dateValueMap.get(showIndex).second
-        var entries = ArrayList<BarEntry>()
+            for ((ct, i) in values.withIndex()){
+                entries.add(BarEntry(i.toFloat(), ct.toFloat()))
+            }
 
-        for ((ct, i) in values.withIndex()){
-            entries.add(BarEntry(i.toFloat(), ct.toFloat()))
+            var dataset  = BarDataSet(entries, "Label")
+            var barData  = BarData(dataset)
+
+            calories_bar_chart.data = barData
+            calories_bar_chart.invalidate()
         }
-
-        var dataset  = BarDataSet(entries, "Label")
-        var barData  = BarData(dataset)
-
-        calories_bar_chart.data = barData
-        calories_bar_chart.invalidate()
-
         super.onViewCreated(view, savedInstanceState)
     }
 

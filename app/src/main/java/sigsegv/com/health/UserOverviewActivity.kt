@@ -34,16 +34,19 @@ class UserOverviewActivity : AppCompatActivity() {
 
         val stubUserSettingData = generateStubUserSettingData()
 
-        mDemoCollectionPagerAdapter = UserInfoPagerAdapter(supportFragmentManager, stubUserSettingData, null)
-        mViewPager = findViewById(R.id.pager)
-        mViewPager.adapter = mDemoCollectionPagerAdapter
-
         AsyncAction({ getUser(this@UserOverviewActivity, email) }, { r ->
             mDemoCollectionPagerAdapter.changeUserSettings(r.settings.userSettings)
         })
         AsyncAction({ getUserData(this@UserOverviewActivity, email) }, { r ->
             mDemoCollectionPagerAdapter.changeUserData(r)
         })
+
+        Thread.sleep(700)
+
+        mDemoCollectionPagerAdapter = UserInfoPagerAdapter(supportFragmentManager, stubUserSettingData, null)
+        mViewPager = findViewById(R.id.pager)
+        mViewPager.adapter = mDemoCollectionPagerAdapter
+
         tab_layout.setupWithViewPager(mViewPager)
 
     }
@@ -129,8 +132,9 @@ class UserOverviewActivity : AppCompatActivity() {
 
         fun changeUserData(data: UserData) {
             this.userData = data
-            last?.calories_bar_chart?.invalidate()
+
             this.notifyDataSetChanged()
+            last?.calories_bar_chart?.invalidate()
         }
 
         override fun getPageTitle(position: Int): CharSequence {
