@@ -1,11 +1,9 @@
 package sigsegv.com.health
 
-import android.graphics.Bitmap
 import android.widget.TextView
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.view.LayoutInflater
 
 import sigsegv.com.health.api.entities.SignInUserData
