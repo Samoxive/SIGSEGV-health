@@ -7,27 +7,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.view.LayoutInflater
-import android.support.v4.content.ContextCompat.startActivity
-import android.content.Intent
+
+import sigsegv.com.health.api.entities.SignInUserData
 
 interface OnItemClickListener{
-    fun onClick(itemPosition: Int)
+    fun onClick(users: List<SignInUserData>, itemPosition: Int)
 }
 
-class UserListAdapter(private val mUsers: List<UserList>, private val clickListener: OnItemClickListener): RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
+class UserListAdapter(private var mUsers: List<SignInUserData>, private val clickListener: OnItemClickListener): RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
         val context = p0.context
         val inflater = LayoutInflater.from(context)
         val itemView = inflater.inflate(R.layout.item_user_selector, p0, false)
-        itemView.setOnClickListener {
-            clickListener.onClick(p1)
-        }
         val vH = ViewHolder(itemView)
+        itemView.setOnClickListener {
+            clickListener.onClick(mUsers, vH.adapterPosition)
+        }
 
         return vH
     }
 
+    fun setData(mUsers: List<SignInUserData>){
+        this.mUsers = mUsers
+        this.notifyDataSetChanged()
+    }
     override fun getItemCount(): Int {
         return mUsers.size
     }
@@ -36,10 +40,10 @@ class UserListAdapter(private val mUsers: List<UserList>, private val clickListe
         val user = mUsers[p1]
 
         val textView = p0.nameTextView
-        textView.text = user.userName
-
+        val str = user.settings.userSettings.firstName +" "+ user.settings.userSettings.lastName
+        textView.text = str
         val imageView = p0.userImageView
-        imageView.setImageBitmap(user.userImage)
+        //imageView.setImageBitmap(null)
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
-import android.util.Log
 import kotlinx.android.synthetic.main.activity_user_overview.*
 import sigsegv.com.health.api.entities.UserData
 import sigsegv.com.health.api.entities.UserSettings
@@ -43,17 +42,15 @@ class UserOverviewActivity : AppCompatActivity() {
     }
 
     fun debugFunc(data : UserData){
-        
+
     }
 
     fun generateStubUserSettingData(): UserSettings {
         return UserSettings("Hamdi Burak", "Usul",
-            "07.11.1997".toDate(), 78, 184, "male",
+            "1997-01-02".toDate(), 78, 184, "male",
             "fitness", "23:00:00.000".toViitaTime(), "08:30:00.000".toViitaTime(),
             10000, 1000)
     }
-
-
 
     class UserInfoPagerAdapter(private val fm: FragmentManager, var userSettings: UserSettings) : FragmentPagerAdapter(fm) {
 

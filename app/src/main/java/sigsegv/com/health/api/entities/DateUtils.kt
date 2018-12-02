@@ -28,3 +28,5 @@ fun CharSequence.toViitaTime(): ViitaTime {
 }
 
 fun String.toDate(): Date = SimpleDateFormat("yyyy-MM-dd").parse(this)
+
+fun ViitaTime.toText(): String = "$hours:$minutes"
