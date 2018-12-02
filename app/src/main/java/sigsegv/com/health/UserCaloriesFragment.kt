@@ -8,6 +8,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import com.github.mikephil.charting.data.*
 import kotlinx.android.synthetic.main.fragment_user_calories.*
 
@@ -18,6 +20,7 @@ class UserCaloriesFragment : Fragment() {
     private lateinit var dates: ArrayList<String>
     private lateinit var dateValueMap : ArrayList<Pair<String, List<Int>>>
     private var showIndex = 0
+    private var showDaily = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,17 +43,33 @@ class UserCaloriesFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if(dateValueMap.size!=0){
+        if(dateValueMap.size != 0){
+           drawChart()
+        }
+        if(dates.size != 0){
+            val arr : Array<String> = Array<String>(dates.size, {r -> dates.get(r) })
+            val adapter : ArrayAdapter<String> = ArrayAdapter<String>(context!!, android.R.layout.simple_spinner_item, arr)
+            spinner.adapter = adapter
+            spinner.setOnItemClickListener { parent, view, position, id -> run{
+                showIndex = position
+                if(showDaily)
+                    drawChart()
+            } }
+        }
+        
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun drawChart(){
+        if(showDaily){
             val values : List<Int> = dateValueMap.get(showIndex).second
-            var entries = ArrayList<BarEntry>()
-
-            for ((ct, i) in values.withIndex()){
+            val entries = ArrayList<BarEntry>()
+            for ((ct, i) in values.withIndex())
                 entries.add(BarEntry(i.toFloat(), ct.toFloat()))
-            }
 
-            var dataset  = BarDataSet(entries, "Burnt Calories")
+            val dataset  = BarDataSet(entries, "Burnt Calories")
             dataset.color = ContextCompat.getColor(this.context!!, R.color.colorPrimary)
-            var barData  = BarData(dataset)
+            val barData  = BarData(dataset)
             barData.barWidth = 10f
 
             calories_bar_chart.data = barData
@@ -60,10 +79,12 @@ class UserCaloriesFragment : Fragment() {
             calories_bar_chart.setDrawValueAboveBar(true)
             calories_bar_chart.description.isEnabled = false
         }
-        toggleButton.setOnClickListener {listen -> Log.w("asd",toggleButton.text.toString())}
-        super.onViewCreated(view, savedInstanceState)
-    }
 
+
+
+
+        calories_bar_chart.invalidate()
+    }
 
 
     companion object {
@@ -78,4 +99,8 @@ class UserCaloriesFragment : Fragment() {
                 }
             }
     }
+}
+
+private fun Spinner.setOnItemClickListener() {
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
 }
