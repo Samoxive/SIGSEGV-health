@@ -4,8 +4,6 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_user_list.*
 import sigsegv.com.health.api.entities.SignInUserData
 import sigsegv.com.health.api.getAllUsers
