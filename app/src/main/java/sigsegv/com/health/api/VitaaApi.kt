@@ -32,7 +32,7 @@ fun registerUserApi(email: String, password: String): ViitaSignInUserResponse {
 
 fun fetchUserData(token: String): ViitaFullDataResponse {
     val request = Request.Builder()
-        .url("$BASE_URL/userSettings")
+        .url("$BASE_URL/data")
         .header("X-Auth-Token", token)
         .build()
     val response = http.newCall(request).execute()
