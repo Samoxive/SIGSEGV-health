@@ -1,14 +1,11 @@
 package sigsegv.com.health
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_user_overview.*
-import java.lang.Exception
 
 private const val ARG_NAME = "name"
 private const val ARG_AGE_GENDER = "age_and_gender"
@@ -21,16 +18,6 @@ private const val ARG_SLEEP_GOAL = "sleep_goal"
 private const val ARG_WAKE_GOAL = "wake_goal"
 
 
-
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [UserOverviewFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [UserOverviewFragment.newInstance] factory method to
- * create an instance of this fragment.
- *
- */
 class UserOverviewFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private lateinit var name: String
@@ -67,13 +54,13 @@ class UserOverviewFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_user_overview, container, false)
     }
 
-    fun Double.format(digits: Int) = java.lang.String.format("%.${digits}f", this)
+    private fun Double.format(digits: Int) = java.lang.String.format("%.${digits}f", this)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         nameUser.text = name
         ageGender.text = ageGenderVal
-        heightText.text = height.toString() + " cm"
-        weightText.text = weight.toString() + " kg"
+        heightText.text = resources.getString(R.string.height_amount_in_cm, height)
+        weightText.text = resources.getString(R.string.weight_amount_in_kg, weight)
         missionText.text = mission
         dailyCaloriesVal.text = dailyCalorieGoal.toString()
         dailyStepsVal.text = dailyStepGoal.toString()
@@ -96,24 +83,4 @@ class UserOverviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(name: String, ageGender: String,
-                      height: Int, weight: Int, mission : String,
-                        dailyStepGoal : Int, dailyCalorieGoal : Int,
-                        dailySleepGoal : String, dailyWakeGoal : String) =
-            UserOverviewFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_NAME, name)
-                    putString(ARG_AGE_GENDER, ageGender)
-                    putInt(ARG_HEIGHT, height)
-                    putInt(ARG_WEIGHT, weight)
-                    putString(ARG_MISSION, mission)
-                    putInt(ARG_DAILY_STEP_GOAL, dailyStepGoal)
-                    putInt(ARG_DAILY_CALORIE_GOAL, dailyCalorieGoal)
-                    putString(ARG_SLEEP_GOAL, dailySleepGoal)
-                    putString(ARG_WAKE_GOAL, dailyWakeGoal)
-                }
-            }
-    }
 }
