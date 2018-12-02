@@ -42,32 +42,15 @@ class UserListAdapter(private var mUsers: List<SignInUserData>, private val clic
         val textView = p0.nameTextView
         val str = user.settings.userSettings.firstName +" "+ user.settings.userSettings.lastName
         textView.text = str
-        val imageView = p0.userImageView
+        //val imageView = p0.userImageView
         //imageView.setImageBitmap(null)
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        var userImageView: ImageView = itemView.findViewById(R.id.user_image)
+        //var userImageView: ImageView = itemView.findViewById(R.id.user_image)
         var nameTextView: TextView = itemView.findViewById(R.id.user_name)
 
     }
 
-}
-
-data class UserList (
-    val userName: String,
-    val userImage: Bitmap?
-) {
-    companion object {
-        fun createMockObjects(n: Int) : List<UserList>{
-            val contacts = ArrayList<UserList>()
-
-            for (i in 1..n) {
-                contacts.add(UserList("Person", null))
-            }
-
-            return contacts
-        }
-    }
 }
