@@ -6,9 +6,12 @@ import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import kotlinx.android.synthetic.main.fragment_user_note.*
 import kotlinx.android.synthetic.main.fragment_user_overview.*
 import sigsegv.com.health.api.getUserNote
+import sigsegv.com.health.api.updateUserNote
 
 private const val ARG_NOTE = "note"
 private const val ARG_EMAIL = "email"
@@ -24,16 +27,9 @@ private const val ARG_EMAIL = "email"
  */
 
 class UserNoteFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private lateinit var note: Editable
-    private lateinit var email: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            note = it.getCharSequence(ARG_NOTE)!! as Editable
-            email = it.getString(ARG_EMAIL)!!
-        }
     }
 
     override fun onCreateView(
@@ -45,9 +41,28 @@ class UserNoteFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        noteText.text = note
         super.onViewCreated(view, savedInstanceState)
         //getUserNote(this.context!!, email)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val act = activity!! as UserOverviewActivity
+        val email = act.email
+        val editText = act.findViewById<EditText>(R.id.noteText)
+        editText.setText(getUserNote(context!!, email))
+        val resetButton = act.findViewById<Button>(R.id.resetBtn)
+        val setButton = act.findViewById<Button>(R.id.setBtn)
+        resetButton.setOnClickListener {
+            editText.setText("")
+            updateUserNote(context!!, email, "")
+        }
+
+        setButton.setOnClickListener {
+            val text = editText.text.toString()
+            updateUserNote(context!!, email, text)
+        }
+
     }
 
     companion object {

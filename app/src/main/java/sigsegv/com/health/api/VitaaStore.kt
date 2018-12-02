@@ -61,14 +61,14 @@ fun getUser(context: Context, email: String): SignInUserData {
 fun getUserData(signInData: SignInUserData): UserData = fetchUserData(signInData.token).toUserData()
 fun getUserData(context: Context, email: String) = getUserData(getUser(context, email))
 
-fun getUserNote(context: Context, email: String) {
-    context.withDatabase {
+fun getUserNote(context: Context, email: String): String {
+    return context.withDatabase {
         val noteKey = "$email.note"
         if (!it.exists(noteKey)) {
             it.put(noteKey, "")
         }
         it.get(noteKey)
-    }
+    }!!
 }
 
 fun updateUserNote(context: Context, email: String, newNote: String) {
