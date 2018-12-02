@@ -23,7 +23,7 @@ class UserOverviewActivity : AppCompatActivity() {
     private lateinit var mDemoCollectionPagerAdapter: UserInfoPagerAdapter
     private lateinit var mViewPager: ViewPager
     lateinit var email: String
-    lateinit var str: String
+    private lateinit var str: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,26 +88,26 @@ class UserOverviewActivity : AppCompatActivity() {
     }
 
     class UserInfoPagerAdapter(
-        private val fm: FragmentManager,
-        var userSettings: UserSettings,
-        var userData: UserData?,
-        var email: String?,
-        var str: String?
+        fm: FragmentManager,
+        private var userSettings: UserSettings,
+        private var userData: UserData?,
+        private var email: String?,
+        private var str: String?
     ) : FragmentPagerAdapter(fm) {
 
         override fun getCount(): Int = 5
 
         private var last: UserCaloriesFragment? = null
 
-        fun calcAge(birthDate: Date): Int {
+        private fun calcAge(birthDate: Date): Int {
             val now  = DateTime(Calendar.getInstance().time)
             val then = DateTime(birthDate)
             return Years.yearsBetween(then, now).years
         }
 
 
-        fun getDateList(v: List<HourlyDataDto>): ArrayList<String> {
-            val format = SimpleDateFormat("yyyy-MM-dd")
+        private fun getDateList(v: List<HourlyDataDto>): ArrayList<String> {
+            val format = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
             val retVal: ArrayList<String> = ArrayList()
             for (item in v) {
                 retVal.add(format.format(item.date))
@@ -115,8 +115,8 @@ class UserOverviewActivity : AppCompatActivity() {
             return retVal
         }
 
-        fun getDateListC(v: List<ContinuousDataDto>): ArrayList<String> {
-            val format = SimpleDateFormat("yyyy-MM-dd")
+        private fun getDateListC(v: List<ContinuousDataDto>): ArrayList<String> {
+            val format = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
             val retVal: ArrayList<String> = ArrayList()
             for (item in v) {
                 retVal.add(format.format(item.date))
@@ -124,85 +124,85 @@ class UserOverviewActivity : AppCompatActivity() {
             return retVal
         }
 
-        fun getSingleStr(dt: Date): String {
-            val format = SimpleDateFormat("yyyy-MM-dd")
+        private fun getSingleStr(dt: Date): String {
+            val format = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
             return format.format(dt)
         }
 
 
         override fun getItem(i: Int): Fragment {
-            if (i == 1) {
-                val fragment = UserCaloriesFragment()
-                val local = userData
-                if (local != null) {
-                    val hourlyDataDtoList: List<HourlyDataDto> = local.calories
-                    fragment.arguments = Bundle().apply {
-                        putStringArrayList("dates", getDateList(hourlyDataDtoList))
-                        putString("type", "Burnt Calories")
-                        for (item in hourlyDataDtoList) {
-                            putIntegerArrayList(getSingleStr(item.date), item.values as java.util.ArrayList<Int>)
+            when (i) {
+                1 -> {
+                    val fragment = UserCaloriesFragment()
+                    val local = userData
+                    if (local != null) {
+                        val hourlyDataDtoList: List<HourlyDataDto> = local.calories
+                        fragment.arguments = Bundle().apply {
+                            putStringArrayList("dates", getDateList(hourlyDataDtoList))
+                            putString("type", "Burnt Calories")
+                            for (item in hourlyDataDtoList) {
+                                putIntegerArrayList(getSingleStr(item.date), item.values as java.util.ArrayList<Int>)
+                            }
                         }
                     }
+                    last = fragment
+                    return fragment
                 }
-                last = fragment
-                return fragment
-            }
-            else if (i == 2){
-                val fragment = UserCaloriesFragment()
-                val local = userData
-                if (local != null) {
-                    val hourlyDataDtoList: List<HourlyDataDto> = local.steps
-                    fragment.arguments = Bundle().apply {
-                        putStringArrayList("dates", getDateList(hourlyDataDtoList))
-                        putString("type", "Steps")
-                        for (item in hourlyDataDtoList) {
-                            putIntegerArrayList(getSingleStr(item.date), item.values as java.util.ArrayList<Int>)
+                2 -> {
+                    val fragment = UserCaloriesFragment()
+                    val local = userData
+                    if (local != null) {
+                        val hourlyDataDtoList: List<HourlyDataDto> = local.steps
+                        fragment.arguments = Bundle().apply {
+                            putStringArrayList("dates", getDateList(hourlyDataDtoList))
+                            putString("type", "Steps")
+                            for (item in hourlyDataDtoList) {
+                                putIntegerArrayList(getSingleStr(item.date), item.values as java.util.ArrayList<Int>)
+                            }
                         }
                     }
+                    last = fragment
+                    return fragment
                 }
-                last = fragment
-                return fragment
-            }
-
-            else if (i == 3){
-                val fragment = UserCaloriesFragment()
-                val local = userData
-                if (local != null) {
-                    val hourlyDataDtoList: List<ContinuousDataDto> = local.regeneration
-                    fragment.arguments = Bundle().apply {
-                        putStringArrayList("dates", getDateListC(hourlyDataDtoList))
-                        for (item in hourlyDataDtoList) {
-                            putIntegerArrayList(getSingleStr(item.date), item.values as java.util.ArrayList<Int>)
+                3 -> {
+                    val fragment = UserCaloriesFragment()
+                    val local = userData
+                    if (local != null) {
+                        val hourlyDataDtoList: List<ContinuousDataDto> = local.regeneration
+                        fragment.arguments = Bundle().apply {
+                            putStringArrayList("dates", getDateListC(hourlyDataDtoList))
+                            for (item in hourlyDataDtoList) {
+                                putIntegerArrayList(getSingleStr(item.date), item.values as java.util.ArrayList<Int>)
+                            }
                         }
                     }
+                    last = fragment
+                    return fragment
                 }
-                last = fragment
-                return fragment
-            }
-
-            else if (i == 4){
-                val fragment = UserNoteFragment()
-                fragment.arguments = Bundle().apply {
-                    putString("email", email)
-                    putString("note", str)
+                4 -> {
+                    val fragment = UserNoteFragment()
+                    fragment.arguments = Bundle().apply {
+                        putString("email", email)
+                        putString("note", str)
+                    }
+                    return fragment
                 }
-                return fragment
-            }
-            else {
-                val fragment = UserOverviewFragment()
-                fragment.arguments = Bundle().apply {
-                    putString("name", userSettings.firstName + " " + userSettings.lastName)
-                    val age = calcAge(userSettings.dateOfBirth)
-                    putString("age_and_gender", age.toString() + " " + userSettings.gender)
-                    putInt("height", userSettings.height)
-                    putInt("weight", userSettings.weight)
-                    putString("mission", userSettings.userMission)
-                    putInt("daily_step_goal", userSettings.stepsGoal)
-                    putInt("daily_calorie_goal", userSettings.caloriesGoal)
-                    putString("sleep_goal", userSettings.sleepGoalStart.toText())
-                    putString("wake_goal", userSettings.sleepGoalEnd.toText())
+                else -> {
+                    val fragment = UserOverviewFragment()
+                    fragment.arguments = Bundle().apply {
+                        putString("name", userSettings.firstName + " " + userSettings.lastName)
+                        val age = calcAge(userSettings.dateOfBirth)
+                        putString("age_and_gender", age.toString() + " " + userSettings.gender)
+                        putInt("height", userSettings.height)
+                        putInt("weight", userSettings.weight)
+                        putString("mission", userSettings.userMission)
+                        putInt("daily_step_goal", userSettings.stepsGoal)
+                        putInt("daily_calorie_goal", userSettings.caloriesGoal)
+                        putString("sleep_goal", userSettings.sleepGoalStart.toText())
+                        putString("wake_goal", userSettings.sleepGoalEnd.toText())
+                    }
+                    return fragment
                 }
-                return fragment
             }
         }
 
