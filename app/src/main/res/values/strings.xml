@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SIGSEGV-Health</string>
+    <string name="app_name">SIGSEGV Health</string>
     <string name="user_list_name">Choose a User</string>
     <string name="height">Height:</string>
     <string name="stub_name">John Doe</string>
