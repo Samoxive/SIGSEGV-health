@@ -82,7 +82,7 @@ class UserOverviewActivity : AppCompatActivity() {
         fun calcAge(birthDate: Date): Int {
             val now  = DateTime(Calendar.getInstance().time)
             val then = DateTime(birthDate)
-            return Years.yearsBetween(now, then).years
+            return Years.yearsBetween(then, now).years
         }
 
 
