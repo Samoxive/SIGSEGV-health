@@ -4,6 +4,7 @@ package sigsegv.com.health
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,7 +48,7 @@ class UserCaloriesFragment : Fragment() {
                 entries.add(BarEntry(i.toFloat(), ct.toFloat()))
             }
 
-            var dataset  = BarDataSet(entries, "Label")
+            var dataset  = BarDataSet(entries, "Burnt Calories")
             dataset.color = ContextCompat.getColor(this.context!!, R.color.colorPrimary)
             var barData  = BarData(dataset)
             barData.barWidth = 10f
@@ -59,6 +60,7 @@ class UserCaloriesFragment : Fragment() {
             calories_bar_chart.setDrawValueAboveBar(true)
             calories_bar_chart.description.isEnabled = false
         }
+        toggleButton.setOnClickListener {listen -> Log.w("asd",toggleButton.text.toString())}
         super.onViewCreated(view, savedInstanceState)
     }
 
