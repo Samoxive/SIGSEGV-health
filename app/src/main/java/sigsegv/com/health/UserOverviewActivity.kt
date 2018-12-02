@@ -135,12 +135,19 @@ class UserOverviewActivity : AppCompatActivity() {
             this.notifyDataSetChanged()
         }
 
+        override fun getItemPosition(`object`: Any): Int {
+            if(`object` is UserCaloriesFragment){
+                `object`.calories_bar_chart.invalidate()
+            }
+            return super.getItemPosition(`object`)
+        }
+
         override fun getPageTitle(position: Int): CharSequence {
-            when (position) {
-                0 -> return "Overview"
-                1 -> return "Calories"
+            return when (position) {
+                0 -> "Overview"
+                1 -> "Calories"
                 else -> {
-                    return "Other"
+                    "Other"
                 }
             }
         }
